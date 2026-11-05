@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Никита Шляпочник</title>
+<meta name="description" content="Никита Шляпочник — онтолог, специалист по применению больших лингвистических моделей, теории информации и информационной безопасности. Формальные методы (роды структур, ДВОСВ), стратегии организаций. МФТИ ФПМИ, кафедра КАиП, АЦ «Концепт».">
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta property="og:title" content="Никита Шляпочник">
+<meta property="og:description" content="Онтолог, специалист по большим лингвистическим моделям, теории информации и информационной безопасности. Общение с любым интеллектом: естественным, искусственным, сверхчеловеческим.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prata&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: asymmetric opener (text left, a self-constructing ДВОСВ tree right), then one left-aligned 1120px column
+   with alternating bands (paper / paper-2 / ink). Boldness lives in the tree, the Didone display type and the
+   rotating word in the thesis line; everything else stays quiet. */
+:root{
+  --paper:#F5F7FB;
+  --paper-2:#EBEFF6;
+  --ink:#0D1B36;
+  --ink-2:#3F4B68;
+  --ink-3:#7A86A3;
+  --line:#D4DAE7;
+  --accent:#1E4FD6;
+  --accent-soft:#DCE5FA;
+  --accent-ink:#FFFFFF;
+  --band-bg:#0D1B36;
+  --band-ink:#F5F7FB;
+  --band-muted:#A9B4CF;
+  --band-line:#2A3A5E;
+  --node-goal:#0D1B36;
+  --node-cap:#1E4FD6;
+  --node-res:#2F8C7A;
+  --node-fn:#5B6B8F;
+  --node-hyp:#C58A1C;
+  --node-unk:#7D4FD6;
+  --edge-block:#CF4C52;
+  --shadow:0 18px 40px -24px rgba(13,27,54,.35);
+  --font-display:'Prata','Times New Roman',Georgia,serif;
+  --font-body:'Golos Text','PT Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+  --radius:10px;
+  --maxw:1120px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0A1328; --paper-2:#111D3A; --ink:#E9EDF7; --ink-2:#B3BDD5; --ink-3:#8290B0; --line:#243352;
+    --accent:#86A8FF; --accent-soft:#1A2B55; --accent-ink:#0A1328;
+    --band-bg:#15234A; --band-ink:#EEF1F9; --band-muted:#A9B4CF; --band-line:#2C3D68;
+    --node-goal:#E9EDF7; --node-cap:#86A8FF; --node-res:#5CC5AE; --node-fn:#9AA8C9; --node-hyp:#E2B04A; --node-unk:#B394F2; --edge-block:#F07078;
+    --shadow:0 18px 40px -24px rgba(0,0,0,.8);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0A1328; --paper-2:#111D3A; --ink:#E9EDF7; --ink-2:#B3BDD5; --ink-3:#8290B0; --line:#243352;
+  --accent:#86A8FF; --accent-soft:#1A2B55; --accent-ink:#0A1328;
+  --band-bg:#15234A; --band-ink:#EEF1F9; --band-muted:#A9B4CF; --band-line:#2C3D68;
+  --node-goal:#E9EDF7; --node-cap:#86A8FF; --node-res:#5CC5AE; --node-fn:#9AA8C9; --node-hyp:#E2B04A; --node-unk:#B394F2; --edge-block:#F07078;
+  --shadow:0 18px 40px -24px rgba(0,0,0,.8);
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--font-body);font-size:17px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+img{max-width:100%;display:block}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:3px}
+h1,h2,h3{font-family:var(--font-display);font-weight:400;line-height:1.12;margin:0;text-wrap:balance;letter-spacing:-.005em}
+h2{font-size:clamp(30px,3.4vw,40px)}
+h3{font-size:22px;font-family:var(--font-body);font-weight:600;letter-spacing:0}
+p{margin:0}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.muted{color:var(--ink-2)}
+.small{font-size:14.5px;color:var(--ink-3)}
+
+/* ---- progress + top bar ---- */
+.progress{position:fixed;left:0;top:env(safe-area-inset-top,0px);height:2px;width:0;background:var(--accent);z-index:11;transition:width .08s linear}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:color-mix(in srgb,var(--paper) 86%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .3s}
+.top.scrolled{border-bottom-color:var(--line)}
+.top .wrap{display:flex;align-items:center;gap:20px;min-height:58px}
+.brand{font-family:var(--font-display);font-size:19px;color:var(--ink);white-space:nowrap}
+.brand:hover{text-decoration:none}
+.nav{display:flex;gap:2px;margin-left:auto;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;min-width:0}
+.nav::-webkit-scrollbar{display:none}
+.nav a{position:relative;color:var(--ink-2);font-size:14px;padding:7px 9px;border-radius:999px;white-space:nowrap;transition:background .2s,color .2s}
+.nav a::after{content:"";position:absolute;left:9px;right:9px;bottom:3px;height:2px;border-radius:2px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .25s ease}
+.nav a:hover{text-decoration:none;color:var(--ink)}
+.nav a.active{color:var(--ink)}
+.nav a.active::after{transform:scaleX(1)}
+.theme-btn{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink-2);display:grid;place-items:center;cursor:pointer;transition:background .2s,color .2s,transform .4s}
+.theme-btn:hover{background:var(--paper-2);color:var(--ink)}
+.theme-btn:active{transform:rotate(180deg)}
+.theme-btn svg{width:17px;height:17px}
+.totop{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:max(18px,env(safe-area-inset-bottom,0px));width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);display:grid;place-items:center;cursor:pointer;box-shadow:var(--shadow);opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .3s,transform .3s,background .2s;z-index:8}
+.totop.show{opacity:1;transform:none;pointer-events:auto}
+.totop:hover{background:var(--paper-2)}
+.totop svg{width:18px;height:18px}
+
+/* ---- hero ---- */
+.hero{padding-block:clamp(36px,6vw,72px) clamp(28px,4vw,48px)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(24px,5vw,64px);align-items:center}
+.kicker{font-family:var(--font-mono);font-size:13.5px;color:var(--ink-3);display:flex;flex-wrap:wrap;gap:6px 0;margin-bottom:18px;line-height:1.5}
+.kicker span{padding-right:12px;margin-right:12px;border-right:1px solid var(--line)}
+.kicker span:last-child{border-right:0;margin-right:0;padding-right:0}
+.hero h1{font-size:clamp(44px,6.2vw,78px);line-height:1.02;margin-bottom:22px}
+.hero h1 .ln{display:block}
+.thesis{font-family:var(--font-display);font-size:clamp(22px,2.4vw,30px);line-height:1.3;color:var(--ink);margin-bottom:18px;text-wrap:balance}
+.thesis .rot{display:inline-grid;vertical-align:bottom;color:var(--accent);height:1.3em;overflow:hidden;transition:width .45s cubic-bezier(.2,.7,.2,1)}
+.thesis .rot span{grid-area:1/1;opacity:0;transform:translateY(100%);transition:transform .55s cubic-bezier(.2,.7,.2,1),opacity .4s}
+.thesis .rot span.on{opacity:1;transform:none}
+.thesis .rot span.off{opacity:0;transform:translateY(-100%)}
+.lead{font-size:clamp(16.5px,1.5vw,18.5px);color:var(--ink-2);max-width:54ch;line-height:1.62}
+.lead b{font-weight:600;color:var(--ink)}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:12px 20px;border-radius:999px;font-weight:500;font-size:15.5px;border:1px solid var(--line);color:var(--ink);background:transparent;transition:background .2s,border-color .2s,transform .2s,box-shadow .2s;cursor:pointer}
+.btn:hover{text-decoration:none;background:var(--paper-2);border-color:var(--ink-3);transform:translateY(-1px)}
+.btn.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.btn.primary:hover{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);box-shadow:0 10px 24px -14px var(--accent)}
+.btn.accent{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.accent:hover{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.btn svg{width:16px;height:16px;flex:none}
+.cta-note{margin-top:14px;font-size:14.5px;color:var(--ink-3);max-width:52ch}
+.tree-wrap{position:relative;min-width:0}
+.tree{display:block;width:100%;height:clamp(300px,36vw,520px);max-width:100%}
+.legend{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:10px;font-size:13px;color:var(--ink-3);justify-content:flex-end}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.legend .ed{width:18px;height:0;border-top:2px dashed var(--ink-3);border-radius:0}
+.legend .eb{width:18px;height:0;border-top:2px solid var(--edge-block);border-radius:0}
+
+.dossier{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.dossier .wrap{display:flex;flex-wrap:wrap;gap:12px 0;padding-block:16px}
+.dossier div{padding-right:28px;margin-right:28px;border-right:1px solid var(--line);font-size:15px;color:var(--ink-2);line-height:1.4}
+.dossier div:last-child{border-right:0;margin-right:0;padding-right:0}
+.dossier b{display:block;color:var(--ink);font-weight:500}
+
+/* ---- manifesto band ---- */
+.band{background:var(--paper-2)}
+.manifesto{padding-block:clamp(48px,7vw,88px)}
+.manifesto .wrap{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:28px 64px;align-items:start}
+.manifesto h2{font-size:clamp(32px,4.2vw,54px);line-height:1.1}
+.manifesto .sub{margin-top:18px;font-size:clamp(17px,1.6vw,20px);color:var(--ink-2);max-width:48ch;line-height:1.5}
+.manifesto .sub b{color:var(--ink);font-weight:600}
+.minds{font-family:var(--font-mono);font-size:13.5px;color:var(--ink-3);margin-bottom:14px}
+.minds-list{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.minds-list li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:baseline;padding:10px 0;border-top:1px solid var(--line);font-size:15.5px}
+.minds-list li:last-child{border-bottom:1px solid var(--line)}
+.minds-list b{font-weight:500;color:var(--ink);font-family:var(--font-display);font-size:17px}
+.minds-list span{color:var(--ink-3);font-size:13.5px;text-align:right}
+
+/* ---- sections ---- */
+section.block{padding-block:clamp(56px,8vw,104px)}
+.sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:24px 48px;align-items:end;margin-bottom:clamp(28px,4vw,44px)}
+.sec-head p{color:var(--ink-2);max-width:62ch;font-size:17px}
+
+/* about */
+.pillars{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:34px 48px}
+.pillar{border-top:2px solid var(--ink);padding-top:16px;transition:border-color .3s}
+.pillar:hover{border-color:var(--accent)}
+.pillar h3{margin-bottom:10px;font-size:20px}
+.pillar p{color:var(--ink-2);font-size:16px}
+.pillar .f{margin-top:14px;font-family:var(--font-mono);font-size:13.5px;color:var(--ink-3);line-height:1.5}
+.pillar .f em{font-style:normal;color:var(--ink-2)}
+
+/* experience timeline */
+.timeline{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:0 48px}
+.timeline .list{grid-column:2;display:grid;grid-template-columns:168px minmax(0,1fr);row-gap:0;position:relative}
+.timeline .list::before{content:"";position:absolute;left:168px;top:10px;bottom:10px;width:1px;background:var(--line);transform:translateX(-13px)}
+.ti{display:contents}
+.ti .d{font-family:var(--font-mono);font-size:13px;color:var(--ink-3);padding:14px 0;padding-right:34px;position:relative;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ti .d::after{content:"";position:absolute;right:8px;top:21px;width:9px;height:9px;border-radius:50%;background:var(--paper);border:2px solid var(--ink-3);transition:transform .25s}
+.ti.now .d::after{border-color:var(--accent);background:var(--accent)}
+.ti:hover .d::after{transform:scale(1.35)}
+.ti .b{padding:12px 0 14px;border-bottom:1px solid var(--line)}
+.ti:last-child .b{border-bottom:0}
+.ti .b b{display:block;font-weight:600;font-size:17px}
+.ti .b span{display:block;color:var(--ink-2);font-size:15.5px;margin-top:3px}
+.ti .b .where{color:var(--ink-3);font-size:14px}
+.timeline aside{grid-column:1;align-self:start}
+.timeline aside p{color:var(--ink-2);max-width:40ch}
+
+/* education */
+.edu{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:24px 48px}
+.edu .deg{font-size:18px;font-weight:600;line-height:1.3}
+.edu .meta{color:var(--ink-2);font-size:15.5px;margin-top:6px;line-height:1.55}
+.edu .item + .item{margin-top:20px;padding-top:20px;border-top:1px solid var(--line)}
+.edu .when{font-family:var(--font-mono);font-size:13px;color:var(--ink-3);margin-bottom:4px}
+.thesis-card{background:var(--paper-2);border-radius:var(--radius);padding:26px 28px}
+.thesis-card h3{font-family:var(--font-display);font-weight:400;font-size:24px;line-height:1.25;margin-bottom:12px}
+.thesis-card p{color:var(--ink-2);font-size:16px}
+.thesis-card .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px 20px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+.thesis-card .facts b{display:block;font-size:24px;font-family:var(--font-display);font-weight:400;line-height:1.1;font-variant-numeric:tabular-nums}
+.thesis-card .facts span{font-size:13.5px;color:var(--ink-3)}
+.thesis-card .formal{margin-top:20px;font-family:var(--font-mono);font-size:13.5px;color:var(--ink-3);line-height:1.6}
+.thesis-card .formal em{color:var(--ink-2);font-style:normal}
+.thesis-card .links{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:18px;font-size:15px}
+
+/* awards */
+.awards{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:24px 48px}
+.awards aside p{color:var(--ink-2);max-width:40ch;margin-top:14px}
+.alist{display:grid;grid-template-columns:92px minmax(0,1fr);row-gap:0}
+.alist .y{font-family:var(--font-mono);font-size:13.5px;color:var(--ink-3);padding:13px 0;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
+.alist .a{padding:13px 0;border-top:1px solid var(--line);font-size:15.5px}
+.alist .a b{font-weight:600;color:var(--ink)}
+.alist .a span{color:var(--ink-2)}
+.alist .a .src{font-size:13px;color:var(--ink-3);margin-left:8px;white-space:nowrap}
+.alist .a .src a{color:var(--ink-3);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line)}
+.alist .a .src a:hover{color:var(--accent)}
+
+/* talks */
+.talks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
+.talk{border:1px solid var(--line);border-radius:var(--radius);padding:26px 28px 24px;display:flex;flex-direction:column;gap:12px;background:var(--paper);transition:transform .25s,box-shadow .25s,border-color .25s}
+.talk:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--ink-3)}
+.talk .venue{font-size:14px;color:var(--ink-3);font-family:var(--font-mono)}
+.talk h3{font-family:var(--font-display);font-weight:400;font-size:25px;line-height:1.22}
+.talk p{color:var(--ink-2);font-size:15.5px}
+.talk .who{font-size:14.5px;color:var(--ink-3);padding-top:12px;border-top:1px solid var(--line);margin-top:auto}
+.talk .who b{color:var(--ink-2);font-weight:500}
+.talk .links{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:15px}
+
+/* figures from the decks: always paper-white, framed, in both themes */
+.fig{background:#FFFFFF;border:1px solid var(--line);border-radius:8px;padding:12px;margin:0 0 14px;max-width:100%;overflow:hidden}
+.fig img{width:100%;height:auto;max-height:340px;object-fit:contain;object-position:center;transition:transform .4s ease}
+.fig.tall img{max-height:420px}
+.proj:hover .fig img{transform:scale(1.02)}
+.fig figcaption{font-size:13px;color:#5A6580;margin-top:8px;line-height:1.4}
+
+/* projects */
+.pgroup{margin-bottom:44px}
+.pgroup:last-child{margin-bottom:0}
+.pgroup h3{font-family:var(--font-display);font-weight:400;font-size:26px;margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.projects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:34px 48px}
+.proj{min-width:0}
+.proj h4{margin:0 0 6px;font-size:18px;font-weight:600;line-height:1.3}
+.proj .year{font-family:var(--font-mono);font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.proj p{color:var(--ink-2);font-size:15.5px}
+.proj .nums{margin-top:10px;font-size:14px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.proj .nums b{color:var(--ink);font-weight:500}
+.proj .links{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px;font-size:14.5px}
+.proj .status{display:inline-block;font-size:12.5px;color:var(--ink-2);background:var(--paper-2);border-radius:999px;padding:2px 10px;margin-left:8px;vertical-align:middle;font-family:var(--font-mono)}
+
+/* skills */
+.skills{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:24px 48px}
+.skills dl{margin:0;display:grid;grid-template-columns:210px minmax(0,1fr);gap:0 24px}
+.skills dt{font-weight:600;font-size:15.5px;padding:14px 0;border-top:1px solid var(--line)}
+.skills dd{margin:0;color:var(--ink-2);font-size:15.5px;padding:14px 0;border-top:1px solid var(--line)}
+.langs{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:22px;font-size:15.5px}
+.langs span b{font-weight:500;color:var(--ink)}
+.langs span i{font-style:normal;color:var(--ink-3);font-family:var(--font-mono);font-size:13px;margin-left:6px}
+
+/* documents */
+.docs{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:28px 24px}
+.doc{display:flex;flex-direction:column;gap:9px;color:inherit;min-width:0}
+.doc:hover{text-decoration:none}
+.doc .page{aspect-ratio:210/297;max-width:100%;background:#fff;border:1px solid var(--line);border-radius:6px;overflow:hidden;box-shadow:var(--shadow);transition:transform .25s,box-shadow .25s;position:relative}
+.doc .page.wide{aspect-ratio:16/9}
+.doc:hover .page{transform:translateY(-5px) rotate(-.4deg)}
+.doc .page img{width:100%;height:100%;object-fit:cover;object-position:top}
+.doc b{font-weight:600;font-size:15px;line-height:1.3}
+.doc span{font-size:13.5px;color:var(--ink-3)}
+.doc .open{font-size:14px;color:var(--accent)}
+.doc:hover .open{text-decoration:underline;text-underline-offset:3px}
+
+/* order band (inverse) */
+.order{background:var(--band-bg);color:var(--band-ink)}
+.order .wrap{padding-block:clamp(52px,7vw,92px)}
+.order h2{color:var(--band-ink);font-size:clamp(30px,3.6vw,44px)}
+.order .intro{color:var(--band-muted);max-width:60ch;margin-top:14px;font-size:17px}
+.order .intro b{color:var(--band-ink);font-weight:500}
+.offers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:36px}
+.offer{border:1px solid var(--band-line);border-radius:var(--radius);padding:26px 28px;display:flex;flex-direction:column;gap:12px;transition:border-color .25s,transform .25s}
+.offer:hover{border-color:var(--band-muted);transform:translateY(-3px)}
+.offer h3{font-family:var(--font-display);font-weight:400;font-size:26px;color:var(--band-ink)}
+.offer p{color:var(--band-muted);font-size:15.5px}
+.offer .free{display:inline-block;font-family:var(--font-mono);font-size:12.5px;color:var(--band-ink);border:1px solid var(--band-line);border-radius:999px;padding:3px 10px;align-self:flex-start}
+.offer .steps{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:6px;font-size:14.5px;color:var(--band-muted)}
+.offer .steps li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px}
+.offer .steps li i{font-style:normal;font-family:var(--font-mono);color:var(--band-ink)}
+.offer .btn{margin-top:auto;align-self:flex-start;border-color:var(--band-muted);color:var(--band-ink)}
+.offer .btn:hover{background:var(--band-ink);color:var(--band-bg);border-color:var(--band-ink)}
+.offer .btn.accent{background:var(--band-ink);color:var(--band-bg);border-color:var(--band-ink)}
+.offer .btn.accent:hover{background:transparent;color:var(--band-ink)}
+.order .fine{margin-top:22px;font-size:14px;color:var(--band-muted)}
+.order .fine a{color:var(--band-ink);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--band-line)}
+
+/* contacts */
+.contacts{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:24px 48px}
+.contacts .big{font-family:var(--font-display);font-size:clamp(26px,3vw,36px);line-height:1.18}
+.clist{display:grid;gap:0}
+.crow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:13px 0;border-top:1px solid var(--line)}
+.crow:last-child{border-bottom:1px solid var(--line)}
+.crow .k{width:120px;flex:none;font-size:13.5px;color:var(--ink-3);font-family:var(--font-mono)}
+.crow .v{font-size:16.5px;color:var(--ink);word-break:break-all;min-width:0}
+.crow .v a{color:var(--ink)}
+.copy{margin-left:auto;flex:none;border:1px solid var(--line);background:transparent;color:var(--ink-2);border-radius:999px;padding:5px 12px;font:500 13px var(--font-body);cursor:pointer;transition:background .2s,color .2s}
+.copy:hover{background:var(--paper-2);color:var(--ink)}
+.copy.done{color:var(--node-res);border-color:var(--node-res)}
+
+footer{border-top:1px solid var(--line);padding-block:26px 40px;color:var(--ink-3);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
+
+/* everything is visible at rest; the only entrance is the hero text settling in once */
+@media (prefers-reduced-motion:no-preference){
+  .hero-text{animation:settle .9s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes settle{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+}
+@media (prefers-reduced-motion:reduce){
+  .thesis .rot span{transition:none}
+  .thesis .rot{transition:none}
+}
+
+@media (max-width:900px){
+  .hero .wrap{grid-template-columns:1fr}
+  .tree{height:clamp(260px,56vw,400px)}
+  .legend{justify-content:flex-start}
+  .sec-head,.timeline,.edu,.skills,.contacts,.awards,.manifesto .wrap{grid-template-columns:1fr}
+  .timeline .list{grid-column:1}
+  .pillars{grid-template-columns:1fr;gap:26px}
+  .talks,.projects,.offers{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  .timeline .list{grid-template-columns:1fr}
+  .timeline .list::before{left:4px;transform:none}
+  .ti .d{font-size:12.5px;padding:14px 0 0 20px;white-space:normal}
+  .ti .d::after{right:auto;left:0;top:19px}
+  .ti .b{padding-left:20px}
+  .skills dl{grid-template-columns:1fr;gap:0}
+  .skills dt{border-top:1px solid var(--line);padding-bottom:4px}
+  .skills dd{border-top:0;padding-top:0}
+  .dossier div{border-right:0;padding-right:0;margin-right:0;width:100%}
+  .kicker span{border-right:0;padding-right:0;margin-right:0;width:100%}
+  .crow .k{width:100%}
+  .thesis-card{padding:20px}
+  .talk,.offer{padding:22px 20px 20px}
+  .alist{grid-template-columns:64px minmax(0,1fr)}
+  .alist .a .src{white-space:normal;margin-left:0;display:block;margin-top:3px}
+  .docs{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 16px}
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<header class="top" id="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top">Н. Шляпочник</a>
+    <nav class="nav" aria-label="Разделы">
+      <a href="#about">Обо мне</a>
+      <a href="#experience">Опыт</a>
+      <a href="#education">Образование</a>
+      <a href="#awards">Олимпиады</a>
+      <a href="#talks">Доклады</a>
+      <a href="#projects">Проекты</a>
+      <a href="#skills">Навыки</a>
+      <a href="#documents">Документы</a>
+      <a href="#order">Заказать</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Переключить тему" title="Тема">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9c0-.5 0-1-.1-1.4A6.5 6.5 0 0 1 12.4 3.1C12.3 3 12.1 3 12 3z"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-text">
+        <div class="kicker"><span>онтолог</span><span>большие лингвистические модели</span><span>теория информации и информационная безопасность</span></div>
+        <h1><span class="ln">Никита</span><span class="ln">Шляпочник</span></h1>
+        <p class="thesis">Общение с любым интеллектом: <span class="rot" id="rot" aria-label="естественным, искусственным, сверхчеловеческим"><span class="on">естественным</span><span>искусственным</span><span>сверхчеловеческим</span></span>.</p>
+        <p class="lead">Работаю там, где <b>строгая математика встречается с живыми организациями</b>: перевожу цели и замыслы руководителей на язык формальных моделей и возвращаю им ясную картину собственного будущего. Довожу задачу от интервью с первыми лицами до модели, кода и готового решения.</p>
+        <div class="cta">
+          <a class="btn accent" href="#order">Заказать проект</a>
+          <a class="btn primary" href="#order">Консультация, первая бесплатно</a>
+          <a class="btn" href="docs/Shliapochnik_Nikita_CV_RU_EN.pdf" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>
+            Резюме, RU / EN
+          </a>
+        </div>
+        <p class="cta-note">Решаю любые задачи, если они грамотно поставлены. Понимание проблемы — 99 % её решения.</p>
+      </div>
+      <div class="tree-wrap">
+        <canvas class="tree" id="tree" role="img" aria-label="Дерево взаимной обусловленности стратегических возможностей: доктринальная цель наверху, ниже возможности, ресурсы, методы, гипотезы и зоны неизвестного, связанные отношениями декомпозиции, поддержки и блокирования"></canvas>
+        <div class="legend" aria-hidden="true">
+          <span><i style="background:var(--node-cap)"></i>возможность</span>
+          <span><i style="background:var(--node-res)"></i>ресурс</span>
+          <span><i style="background:var(--node-fn)"></i>метод</span>
+          <span><i style="background:var(--node-hyp)"></i>гипотеза</span>
+          <span><i style="background:var(--node-unk)"></i>неизвестное</span>
+          <span><i class="ed"></i>поддержка</span>
+          <span><i class="eb"></i>блокирование</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="dossier">
+    <div class="wrap">
+      <div><b>МФТИ, ФПМИ</b>бакалавр 2026, магистрант</div>
+      <div><b>Кафедра КАиП</b>концептуальный анализ и проектирование</div>
+      <div><b>НП ЦИВТ «Концепт»</b>стратегический консалтинг</div>
+      <div><b>Долгопрудный</b>Московская область</div>
+    </div>
+  </div>
+
+  <section class="band manifesto" id="manifesto">
+    <div class="wrap">
+      <div class="rv">
+        <h2>Онтология и семантика — ядро всех наук.</h2>
+        <p class="sub">Любая задача начинается с того, что мы договариваемся о понятиях: что считается объектом, что термином и что отношением между ними. Если это сделано строго, решение часто следует само. <b>Если нет, никакая модель не спасёт.</b></p>
+      </div>
+      <div class="rv">
+        <div class="minds">Руководствуюсь трудами</div>
+        <ul class="minds-list">
+          <li><b>Вильфредо Парето</b><span>распределение усилий и результата</span></li>
+          <li><b>Курт Гёдель</b><span>границы формальных систем</span></li>
+          <li><b>Клод Шеннон</b><span>информация, канал, шум</span></li>
+          <li><b>Спартак Никаноров</b><span>концептуальный анализ и проектирование</span></li>
+          <li><b>Побиск Кузнецов</b><span>инварианты и целеустремлённые системы</span></li>
+          <li><b>Георгий Щедровицкий</b><span>методология мыследеятельности</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="about">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <h2>Четыре опоры</h2>
+        <p>Школа С. П. Никанорова и З. А. Кучкарова дала мне формальный аппарат, МФТИ — математику, Шеннон — язык информации, а работа с реальными организациями — задачи, на которых всё это проверяется.</p>
+      </div>
+      <div class="pillars">
+        <div class="pillar rv">
+          <h3>Онтология и семантика</h3>
+          <p>Концептуальный анализ и проектирование в аппарате родов структур Н. Бурбаки: экспликация теорий, синтез концептуальных схем через отождествления, контроль типизации понятий, деревья целей и дерево взаимной обусловленности стратегических возможностей (ДВОСВ).</p>
+          <div class="f">S₁ ∈ ℬ(X₁ × X₁) — дуги дерева;<br>S₂ ∈ ℬ(X₁) — интересы субъекта;<br><em>вершина := возможность, дуга := обусловленность</em></div>
+        </div>
+        <div class="pillar rv">
+          <h3>Большие лингвистические модели</h3>
+          <p>Дообучение БЛМ в контексте теоретико-системным конструктам: модели получают не пересказ, а таблицу конституент и текст предметной области, а возвращают интерпретацию и критику аксиом. Цикл «предъявление — критика — доработка — верификация»; человек держит связность, модель — содержание.</p>
+          <div class="f">ChatGPT 5.2 · DeepSeek 3.2 · Claude Opus 4.6<br><em>7 экспликаций, 14 итераций, 12 автоматических проверок нотации</em></div>
+        </div>
+        <div class="pillar rv">
+          <h3>Теория информации и информационная безопасность</h3>
+          <p>Информация как мера снятой неопределённости: ценность информации в правилах остановки, энтропия и каналы связи в моделях коммуникации субъектов. Закрытые контуры для работы с моделями и документами организаций: каскады VPN, корпоративные мессенджеры с отечественной криптографией, разграничение доступа.</p>
+          <div class="f">Шеннон · Колмогоров · MUS-ядра и MaxSAT<br><em>правило остановки спора — по ценности информации теста на якорь</em></div>
+        </div>
+        <div class="pillar rv">
+          <h3>Стратегии организаций</h3>
+          <p>От интервью с первыми лицами и внутренних документов до дерева возможностей на 120–210 вершин, которое руководство может прочитать и оспорить. Граница применимости честно: свыше нескольких десятков вершин нужен эксперт в контуре.</p>
+          <div class="f">АО «Гипрогор», ОАО «Шереметьево-Карго»,<br>ретроспектива Kodak<br><em>стратегия проектного института на 2026–2030</em></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block band" id="experience">
+    <div class="wrap">
+      <div class="timeline">
+        <aside class="rv">
+          <h2>Опыт</h2>
+          <p style="margin-top:14px">Консалтинг, исследовательская лаборатория, две инженерные стажировки и преподавание.</p>
+        </aside>
+        <div class="list">
+          <div class="ti now rv"><div class="d">01.2026 — н. в.</div><div class="b"><b>Консультант-стажёр</b><span>НП «Центр инноваций и высоких технологий “Концепт”»</span><span class="where">Москва, по совместительству</span></div></div>
+          <div class="ti now rv"><div class="d">05.2025 — н. в.</div><div class="b"><b>Лаборант-исследователь</b><span>МФТИ, Учебно-методическая лаборатория стратегического развития и цифровой трансформации</span><span class="where">Долгопрудный</span></div></div>
+          <div class="ti rv"><div class="d">07 — 08.2024</div><div class="b"><b>Стажёр-аналитик данных</b><span>ООО «Сравни.ру», отдел аналитики</span><span class="where">Москва</span></div></div>
+          <div class="ti rv"><div class="d">2023</div><div class="b"><b>Архитектор баз данных</b><span>GMCS — ООО «Джи-Эм-Си-Эс Верэкс»</span><span class="where">Москва</span></div></div>
+          <div class="ti rv"><div class="d">2021, 5 мес.</div><div class="b"><b>Репетитор по физике</b><span>Индивидуальные занятия со школьниками: школьная физика от механики до электродинамики, разбор задач, подготовка к контрольным и экзаменам</span><span class="where">Долгопрудный, Москва</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="education">
+    <div class="wrap">
+      <div class="edu">
+        <div class="rv">
+          <h2>Образование</h2>
+          <div style="margin-top:18px">
+            <div class="item">
+              <div class="when">2026 — н. в.</div>
+              <div class="deg">МФТИ, магистратура ФПМИ</div>
+              <div class="meta">Направление 01.04.02 «Прикладная математика и информатика».<br>Кафедра концептуального анализа и проектирования.</div>
+            </div>
+            <div class="item">
+              <div class="when">2022 — 2026</div>
+              <div class="deg">МФТИ, бакалавриат ФПМИ</div>
+              <div class="meta">Физтех-школа прикладной математики и информатики.<br>Направление 03.03.01 «Прикладные математика и физика».<br>Профиль: математическая физика, компьютерные технологии и математическое моделирование в экономике.<br>Базовая кафедра концептуального анализа и проектирования.</div>
+            </div>
+            <div class="item">
+              <div class="when">2018 — 2020</div>
+              <div class="deg">Физтех-лицей им. П. Л. Капицы</div>
+              <div class="meta">Долгопрудный. Аттестат о среднем общем образовании, 2020.</div>
+            </div>
+            <div class="item">
+              <div class="when">2011 — 2018</div>
+              <div class="deg">Лицей № 5, Долгопрудный</div>
+              <div class="meta">Физико-математический профиль.</div>
+            </div>
+          </div>
+        </div>
+        <div class="thesis-card rv">
+          <div class="small" style="margin-bottom:10px">Выпускная квалификационная работа, защищена 18 июня 2026</div>
+          <h3>Исследование возможностей использования больших лингвистических моделей при решении задач стратегического планирования и управления</h3>
+          <p>Семь теоретико-системных конструктов школы Никанорова–Кучкарова предъявлялись моделям DeepSeek, ChatGPT и Claude в разных формах, от текста до формализованных концептуальных схем в аппарате родов структур. Результат: гибридный подход к дообучению в контексте, оригинальный конструкт ДВОСВ и методика его применения, подтверждённая тремя экспериментами на реальных организациях.</p>
+          <div class="facts">
+            <div><b data-count="7">7</b><span>конструктов в родах структур</span></div>
+            <div><b data-count="3">3</b><span>эксперимента: Kodak, Гипрогор, Шереметьево-Карго</span></div>
+            <div><b data-count="14">14</b><span>итераций построения ДВОСВ</span></div>
+            <div><b data-count="127">127</b><span>страниц основного текста, 9 приложений</span></div>
+          </div>
+          <div class="formal">Научный руководитель — к.т.н. <em>А. В. Костюк</em>; научный консультант — <em>И. Р. Борисов</em>.</div>
+          <div class="links">
+            <a href="docs/Shlyapochnik_Diplom_VKR_2026.pdf" target="_blank" rel="noopener">Текст диплома</a>
+            <a href="docs/Shlyapochnik_Avtoreferat_VKR_2026.pdf" target="_blank" rel="noopener">Автореферат</a>
+            <a href="docs/Shlyapochnik_Prezentaciya_zashchity_VKR_2026.pdf" target="_blank" rel="noopener">Презентация защиты</a>
+            <a href="docs/Shlyapochnik_Spravka_antiplagiat.pdf" target="_blank" rel="noopener">Справка об оригинальности</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block band" id="awards">
+    <div class="wrap">
+      <div class="awards">
+        <aside class="rv">
+          <h2>Олимпиады</h2>
+          <p>Школьные годы: математика и физика на региональных этапах ВсОШ, перечневые олимпиады МФТИ и МГУ, Турнир городов. Там, где итоговые протоколы опубликованы, стоит ссылка.</p>
+        </aside>
+        <div class="alist rv">
+          <div class="y">2020</div><div class="a"><b>«Покори Воробьёвы горы!»</b>, заключительный этап, физика — <span>диплом III степени</span><span class="src"><a href="https://pvg.mk.ru/stage2/works/2020/" target="_blank" rel="noopener">протокол</a></span></div>
+          <div class="y">2020</div><div class="a"><b>Региональный этап ВсОШ по математике</b>, 11 класс — <span>призёр</span><span class="src"><a href="https://anoo.ftl.name/pobediteli-i-prizery-regionalnogo-etapa-vserossiyskoy-olimpiady-shkolnikov-po-matematike-2019.htm" target="_blank" rel="noopener">список лицея</a></span></div>
+          <div class="y">2019</div><div class="a"><b>Олимпиада «Физтех»</b>, заключительный этап, физика, 10 класс — <span>победитель</span><span class="src"><a href="https://conf60.mipt.ru/articles/2864" target="_blank" rel="noopener">протокол</a></span></div>
+          <div class="y">2019</div><div class="a"><b>Олимпиада «Физтех»</b>, заключительный этап, математика, 10 класс — <span>призёр, диплом II степени</span><span class="src"><a href="https://conf61.mipt.ru/articles/2861" target="_blank" rel="noopener">протокол</a></span></div>
+          <div class="y">2018</div><div class="a"><b>Олимпиада «Физтех»</b>, заключительный этап — <span>диплом II степени</span><span class="src"><a href="https://abitu.net/articles/1229" target="_blank" rel="noopener">протокол</a></span></div>
+          <div class="y">2018, 2017</div><div class="a"><b>Региональный этап ВсОШ по физике</b> — <span>призёр</span></div>
+          <div class="y">2018, 2017, 2016</div><div class="a"><b>Региональный этап ВсОШ по математике</b> — <span>призёр</span></div>
+          <div class="y">2017</div><div class="a"><b>39-й Международный математический Турнир городов</b>, осенний тур, 9 класс — <span>диплом победителя</span><span class="src"><a href="https://www.turgor.ru/results/39/res_world.php" target="_blank" rel="noopener">протокол</a></span></div>
+          <div class="y">2014 — 2020</div><div class="a"><b>Школьные и муниципальные этапы ВсОШ</b> по математике и физике — <span>многократный победитель и призёр</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="talks">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <h2>Доклады</h2>
+        <p>Результаты работы дважды выносились на внешнюю аудиторию: в Совет Федерации и в научный институт в области искусственного интеллекта. Докладчик — заведующий кафедрой, я готовил содержание, эксперименты и материалы.</p>
+      </div>
+      <div class="talks">
+        <article class="talk rv">
+          <div class="venue">Совет Федерации Федерального Собрания РФ · 2026</div>
+          <h3>Применение больших языковых моделей в стратегическом планировании</h3>
+          <p>Что модели умеют в задачах стратегии, а что нет: деревья целей Tesla, теория субъектности на кейсах OpenAI и Boeing, ретроспектива Kodak, деревья возможностей для АО «Гипрогор» и ОАО «Шереметьево-Карго». Выводы о границах применимости и о гибридном экспертном режиме.</p>
+          <div class="links"><a href="docs/Kuchkarov_Sovet_Federacii_LLM_strategicheskoe_planirovanie_2026.pdf" target="_blank" rel="noopener">Презентация, 33 слайда</a></div>
+          <div class="who">Докладчик — <b>З. А. Кучкаров</b>, зав. кафедрой КАиП ФПМИ МФТИ, директор НП ЦИВТ «Концепт», д.э.н., академик РАЕН. Разработчики — к.т.н. А. В. Костюк, Н. Я. Шляпочник.</div>
+        </article>
+        <article class="talk rv">
+          <div class="venue">Научный институт в области ИИ · осень 2026</div>
+          <h3>Языковые модели интерпретируют родоструктурные экспликации</h3>
+          <p>Модели получают экспликацию теории в родах структур и текст предметной области, а возвращают интерпретацию: сеть процессов с вычисленной границей, ДВОСВ на 122 и 212 вершин, диагноз заблокированной возможности. Семь экспликаций как бенчмарк. Предложены три совместные работы: бенчмарк экспликаций, агент-верификатор аксиом, морфология как концептуальная схема.</p>
+          <div class="who">Докладчик — <b>З. А. Кучкаров</b>. Разработчики — к.т.н. А. В. Костюк, Н. Я. Шляпочник.</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block band" id="projects">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <h2>Проекты и исследования</h2>
+        <p>Консалтинговые кейсы, в которых конструкт ДВОСВ прошёл проверку на реальных организациях, собственные исследования в логике, комбинаторике и теории чисел и инструменты, написанные по дороге.</p>
+      </div>
+
+      <div class="pgroup">
+        <h3 class="rv">Консалтинговые кейсы</h3>
+        <div class="projects">
+          <div class="proj rv">
+            <figure class="fig tall"><img src="assets/fig_giprogor_122_170.png" alt="Фрагмент дерева возможностей АО «Гипрогор»: критическая цепочка от цели «создавать ценность для холдинга, 2026–2030» до финансовой модели для акционера" loading="lazy" width="1400" height="1396"><figcaption>Фрагмент дерева: критическая цепочка</figcaption></figure>
+            <h4>Стратегический ДВОСВ для АО «Гипрогор»</h4>
+            <div class="year">апрель — июнь 2026 · НП ЦИВТ «Концепт»</div>
+            <p>Градостроительный проектный институт. Модель сначала раскритиковала матрицу целей консультантов (12 замечаний, два критических: смешение целей, средств и задач), затем построила дерево возможностей; отдельно собраны дерево проблем, таблицы восприятия и отчёт для акционера. Результаты вошли в стратегию на 2026–2030 годы.</p>
+            <div class="nums"><b>122</b> вершины, <b>170</b> рёбер, 6 уровней, 7 проверяемых гипотез, 2 заблокированных сценария</div>
+          </div>
+          <div class="proj rv">
+            <figure class="fig"><img src="assets/fig_shk_37_212.png" alt="ОАО «Шереметьево-Карго»: рост дерева с 37 до 212 вершин и с 64 до 236 рёбер за итерации; фрагмент дерева от цели «перейти к регулярному менеджменту, сохранив лидерство на рынке»" loading="lazy" width="1400" height="576"><figcaption>От 37 до 212 вершин: фрагмент дерева</figcaption></figure>
+            <h4>ДВОСВ для ОАО «Шереметьево-Карго»</h4>
+            <div class="year">октябрь 2025 — июнь 2026 · НП ЦИВТ «Концепт»</div>
+            <p>Грузовой авиатерминал на стыке авиационной, логистической и таможенной отраслей. Дерево выросло за итерации с 37 до 212 вершин; по ходу разработана нотация типов узлов и рёбер с 12 автоматическими проверками. Узкие места: долгосрочные контракты с перевозчиками и таможенная автоматизация. Отдельно установлена обратная совместимость ДВОСВ с методом, который консультанты «Концепта» применяли на том же предприятии в 2000 году.</p>
+            <div class="nums"><b>212</b> вершин, <b>236</b> рёбер, 5 уровней, ветвь «партнёрская сеть» — 55 узлов</div>
+          </div>
+          <div class="proj rv">
+            <figure class="fig tall"><img src="assets/fig_kodak.png" alt="Граф возможностей Kodak: гипотеза «плёнка останется» блокирует возможность «цифровые продукты»" loading="lazy" width="1400" height="1391"><figcaption>Гипотеза руководства блокирует объективную возможность</figcaption></figure>
+            <h4>Ретроспектива Kodak</h4>
+            <div class="year">2026 · эксперимент диплома</div>
+            <p>Исторический кейс с известным ответом как проверка метода. По истории компании и синтезированной схеме модель нашла не отсутствие технологии, а гипотезу руководства, которая заблокировала объективную возможность: плёнка кормит, цифра угрожает.</p>
+            <div class="nums"><b>12</b> вершин, 5 уровней, пояснительная записка</div>
+          </div>
+          <div class="proj rv">
+            <figure class="fig"><img src="assets/fig_tesla_tree.png" alt="Дерево целей Tesla, построенное языковой моделью: выделены узлы, которые не являются целями — область деятельности, задача или средство" loading="lazy" width="1400" height="619"><figcaption>Дерево целей Tesla: где модель смешала цели со средствами</figcaption></figure>
+            <h4>Деревья целей Tesla и анализ субъектности OpenAI и Boeing</h4>
+            <div class="year">2026 · эксперименты диплома и докладов</div>
+            <p>Открытые кейсы для калибровки: ChatGPT 5.2 и DeepSeek 3.2 строили деревья целей Tesla на 17–46 узлов и воспроизводили одно и то же смешение онтологических типов; теория субъектности на кейсах OpenAI и Boeing 737 MAX дала классификацию субъект-субъектных отношений и нарушенных аксиом.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="pgroup">
+        <h3 class="rv">Исследования</h3>
+        <div class="projects">
+          <div class="proj rv">
+            <h4>Есть ли смысл спорить? Логическая теория сходимости, раскола и несовместного ядра дебатов</h4>
+            <div class="year">2026 · статья, RU и EN</div>
+            <p>Мнения моделируются как дедуктивно замкнутые теории на решётке Тарского, обмен аргументами — как слияние с ограничением совместности. Несовместное ядро спора — минимальное невыполнимое подмножество (MUS); различие вербального и субстантивного спора формализовано через типизированные согласования словарей относительно заякоренного словаря. Правило остановки выводится из ценности информации теста на якорь. Доказательства: интерполяция Крейга, двойственность Рейтера, SAT/MaxSAT.</p>
+            <div class="nums">Подана в «Логические исследования» и Journal of Logic and Computation</div>
+            <div class="links">
+              <a href="docs/Shlyapochnik_Est_li_smysl_sporit_RU.pdf" target="_blank" rel="noopener">Статья, RU</a>
+              <a href="docs/Shlyapochnik_Is_There_Any_Point_in_Arguing_EN.pdf" target="_blank" rel="noopener">Paper, EN</a>
+              <a href="docs/Shlyapochnik_Statya_prostymi_slovami.pdf" target="_blank" rel="noopener">Простыми словами</a>
+            </div>
+          </div>
+          <div class="proj rv">
+            <figure class="fig"><img src="assets/fig_cycle.png" alt="Цикл работы с моделью: теория (схемы КАиП файлами в диалог) → построение (модель строит схему или граф) → проверка (эксперт проверяет смысл) → доработка (модель исправляет по замечаниям)" loading="lazy" width="1400" height="1400"><figcaption>Цикл «теория — построение — проверка — доработка»</figcaption></figure>
+            <h4>Дообучение языковых моделей в контексте: семь конструктов</h4>
+            <div class="year">2025 — 2026 · диплом</div>
+            <p>События в родственных отношениях, сети процессов, теория изменения, дерево целей, теории субъектности, неизвестного и деятельности. Для первого конструкта написан генератор генеалогических событий: 201 индивид, 10 кланов, 7 поколений, более 200 лет истории. Модели читают аксиомы и находят в них ошибки: Claude Opus 4.6 указал на ошибку в аксиоме A2 и построил контрпример к A4.</p>
+          </div>
+          <div class="proj rv">
+            <figure class="fig tall"><img src="assets/fig_zeta_zeros.png" alt="Три графика: отклонение N(T) от главного члена колеблется около 7/8; расстояния между соседними нулями дзета-функции повторяют распределение GUE, а не Пуассона; колебания S(T), восстановленные из простых чисел" loading="lazy" width="990" height="1100"><figcaption>1500 первых нулей ζ: статистика расстояний и S(T) из простых</figcaption></figure>
+            <h4>Нули дзета-функции: численные эксперименты <span class="status">заметки</span></h4>
+            <div class="year">октябрь 2026 · Python, mpmath</div>
+            <p>Исследовательские заметки вокруг гипотезы Римана: на 1500 первых нулях проверено, что отклонение N(T) от главного члена колеблется около 7/8, что расстояния между нулями отталкиваются как уровни энергии в GUE, и что S(T) восстанавливается из простых чисел; резонансы рассеяния на модулярной поверхности сравнены с суммой лоренцианов по нулям.</p>
+          </div>
+          <div class="proj rv">
+            <h4>Хроматическое число плоскости <span class="status">в работе</span></h4>
+            <div class="year">2026 · задача Хадвигера–Нельсона</div>
+            <p>SAT-пайплайн: генерация unit-distance графов и проверка k-раскрашиваемости через pysat, минимизация по unsat-ядрам (техника Хойле). Орбиты до ~3300 вершин оказались 4-раскрашиваемыми; текущая цель — 5-хроматические графы без веретена Мозера короче известного рекорда.</p>
+          </div>
+          <div class="proj rv">
+            <h4>Решётка якорей <span class="status">в работе</span></h4>
+            <div class="year">2026 · продолжение статьи о спорах</div>
+            <p>Вердикт «вербальный или субстантивный» рассматривается как функция якоря A на решётке словарей; строится исчисление на решётке: производные, интегралы, мера конфликта.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="pgroup">
+        <h3 class="rv">Инструменты и приложения</h3>
+        <div class="projects">
+          <div class="proj rv">
+            <h4>Генератор ДВОСВ для draw.io</h4>
+            <div class="year">2025 — 2026 · Python</div>
+            <p>Дерево из JSON превращается в диаграмму с ортогональной маршрутизацией рёбер (bus-and-stem, waypoints), типизацией узлов и рёбер и 12 проверками нотации: связность, типы рёбер, единственность корня. Конвертер в Graphviz, экспорт JSON. Полотно Шереметьево-Карго: 25 795 × 1 850 px, 14 листов А3.</p>
+          </div>
+          <div class="proj rv">
+            <h4>Топологическая карта жилья Москвы</h4>
+            <div class="year">октябрь 2025 — март 2026 · FastAPI, Leaflet, NetworkX, SQLite</div>
+            <p>Карта доступности жилья по станциям: обратный Дейкстра от выбранных якорей по графу из 445 станций, веб-интерфейс на Leaflet.</p>
+          </div>
+          <div class="proj rv">
+            <h4>Методичка для поступающих в магистратуру ФПМИ</h4>
+            <div class="year">2026 · 502 страницы, 11 глав</div>
+            <p>Подготовка к вступительному экзамену по программе «Прикладная математика и информатика»: определения, теоремы и примеры в читабельном стиле «Госбук», собранные по программе экзамена.</p>
+            <div class="links"><a href="docs/FPMI_Metodichka_magistratura_PMI.pdf" target="_blank" rel="noopener">Открыть PDF, 13 МБ</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="skills">
+    <div class="wrap">
+      <div class="skills">
+        <div class="rv">
+          <h2>Навыки</h2>
+          <p class="muted" style="margin-top:14px;max-width:40ch">Методология и математика — основа; код и модели — инструменты, которыми она доводится до результата.</p>
+          <div class="langs">
+            <span><b>Русский</b><i>родной</i></span>
+            <span><b>English</b><i>C1</i></span>
+            <span><b>Español</b><i>B1</i></span>
+            <span><b>Deutsch</b><i>A1</i></span>
+          </div>
+        </div>
+        <dl class="rv">
+          <dt>Онтология и методология</dt><dd>Концептуальный анализ и проектирование; роды структур Бурбаки, RS-язык, синтез концептуальных схем; теория организации и управления организацией; деревья целей и стратегических возможностей; проектирование процессов развития; IDEF0.</dd>
+          <dt>Большие лингвистические модели</dt><dd>Дообучение в контексте формальным теориям; проектирование промптов и пайплайнов; гибридный контур «модель строит — эксперт проверяет»; оценка обученности прикладным тестом; ChatGPT, DeepSeek, Claude, Claude Code.</dd>
+          <dt>Теория информации и безопасность</dt><dd>Энтропия, каналы, ценность информации; SAT/MaxSAT, MUS-ядра; закрытые контуры обработки данных, VPN-каскады, корпоративная криптография, разграничение доступа.</dd>
+          <dt>Математика и физика</dt><dd>Функциональный анализ; уравнения математической физики; квантовая механика и квантовые вычисления; случайные процессы и СДУ; методы оптимального управления; статистическая физика.</dd>
+          <dt>Разработка и данные</dt><dd>Python (pandas, NetworkX, FastAPI, matplotlib, mpmath); JavaScript; Go; Java; C, C++; SQL, PostgreSQL; Git; LaTeX.</dd>
+          <dt>Машинное обучение</dt><dd>PyTorch: свёрточные и рекуррентные сети, автоэнкодеры; анализ временных рядов.</dd>
+          <dt>Преподавание</dt><dd>Индивидуальные занятия по физике и математике со школьниками; объяснение формальных теорий неспециалистам, от популярных текстов до методичек.</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="block band" id="documents">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <h2>Документы</h2>
+        <p>Резюме, статьи, материалы диплома и презентации в PDF. Всё открывается в новой вкладке.</p>
+      </div>
+      <div class="docs">
+        <a class="doc rv" href="docs/Shliapochnik_Nikita_CV_RU_EN.pdf" target="_blank" rel="noopener">
+          <div class="page"><img src="assets/thumb_Shliapochnik_Nikita_CV_RU_EN.jpg" alt="" loading="lazy" width="420" height="594"></div>
+          <b>Резюме</b><span>RU и EN, 2 страницы, август 2026</span><span class="open">Открыть PDF</span>
+        </a>
+        <a class="doc rv" href="docs/Shlyapochnik_Diplom_VKR_2026.pdf" target="_blank" rel="noopener">
+          <div class="page"><img src="assets/thumb_Shlyapochnik_Diplom_VKR_2026.jpg" alt="" loading="lazy" width="420" height="594"></div>
+          <b>Бакалаврский диплом</b><span>полный текст с приложениями, 9 МБ</span><span class="open">Открыть PDF</span>
+        </a>
+        <a class="doc rv" href="docs/Shlyapochnik_Avtoreferat_VKR_2026.pdf" target="_blank" rel="noopener">
+          <div class="page"><img src="assets/thumb_Shlyapochnik_Avtoreferat_VKR_2026.jpg" alt="" loading="lazy" width="420" height="594"></div>
+          <b>Автореферат ВКР</b><span>10 страниц, июнь 2026</span><span class="open">Открыть PDF</span>
+        </a>
+        <a class="doc rv" href="docs/Shlyapochnik_Prezentaciya_zashchity_VKR_2026.pdf" target="_blank" rel="noopener">
+          <div class="page wide"><img src="assets/thumb_Shlyapochnik_Prezentaciya_zashchity_VKR_2026.jpg" alt="" loading="lazy" width="420" height="236"></div>
+          <b>Презентация защиты</b><span>22 слайда, июнь 2026</span><span class="open">Открыть PDF</span>
+        </a>
+        <a class="doc rv" href="docs/Kuchkarov_Sovet_Federacii_LLM_strategicheskoe_planirovanie_2026.pdf" target="_blank" rel="noopener">
+          <div class="page wide"><img src="assets/thumb_Kuchkarov_Sovet_Federacii_LLM_strategicheskoe_planirovanie_2026.jpg" alt="" loading="lazy" width="420" height="236"></div>
+          <b>Доклад для Совета Федерации</b><span>33 слайда, 2026</span><span class="open">Открыть PDF</span>
+        </a>
+        <a class="doc rv" href="docs/Shlyapochnik_Est_li_smysl_sporit_RU.pdf" target="_blank" rel="noopener">
+          <div class="page"><img src="assets/thumb_Shlyapochnik_Est_li_smysl_sporit_RU.jpg" alt="" loading="lazy" width="420" height="594"></div>
+          <b>Есть ли смысл спорить?</b><span>научная статья, RU, 22 страницы</span><span class="open">Открыть PDF</span>
+        </a>
+        <a class="doc rv" href="docs/Shlyapochnik_Is_There_Any_Point_in_Arguing_EN.pdf" target="_blank" rel="noopener">
+          <div class="page"><img src="assets/thumb_Shlyapochnik_Is_There_Any_Point_in_Arguing_EN.jpg" alt="" loading="lazy" width="420" height="594"></div>
+          <b>Is There Any Point in Arguing?</b><span>paper, EN, 21 pages</span><span class="open">Открыть PDF</span>
+        </a>
+        <a class="doc rv" href="docs/Shlyapochnik_Statya_prostymi_slovami.pdf" target="_blank" rel="noopener">
+          <div class="page"><img src="assets/thumb_Shlyapochnik_Statya_prostymi_slovami.jpg" alt="" loading="lazy" width="420" height="594"></div>
+          <b>Статья простыми словами</b><span>для тех, кто не логик, 9 страниц</span><span class="open">Открыть PDF</span>
+        </a>
+        <a class="doc rv" href="docs/Shlyapochnik_Otchet_KMB_KAiP_2025.pdf" target="_blank" rel="noopener">
+          <div class="page"><img src="assets/thumb_Shlyapochnik_Otchet_KMB_KAiP_2025.jpg" alt="" loading="lazy" width="420" height="594"></div>
+          <b>Отчёт по «Курсу молодого бойца» КАиП</b><span>разделы 3–5, лето 2025, 74 страницы</span><span class="open">Открыть PDF</span>
+        </a>
+        <a class="doc rv" href="docs/FPMI_Metodichka_magistratura_PMI.pdf" target="_blank" rel="noopener">
+          <div class="page"><img src="assets/thumb_FPMI_Metodichka_magistratura_PMI.jpg" alt="" loading="lazy" width="420" height="594"></div>
+          <b>Методичка ФПМИ</b><span>подготовка к экзамену в магистратуру, 502 страницы</span><span class="open">Открыть PDF</span>
+        </a>
+        <a class="doc rv" href="docs/Shlyapochnik_Spravka_antiplagiat.pdf" target="_blank" rel="noopener">
+          <div class="page"><img src="assets/thumb_Shlyapochnik_Spravka_antiplagiat.jpg" alt="" loading="lazy" width="420" height="594"></div>
+          <b>Справка об оригинальности ВКР</b><span>Антиплагиат, июнь 2026</span><span class="open">Открыть PDF</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="order" id="order">
+    <div class="wrap">
+      <div class="rv">
+        <h2>Заказать проект или консультацию</h2>
+        <p class="intro">Беру задачи из стратегии, онтологии, формализации и применения языковых моделей: от разбора одной проблемы до полного дерева возможностей организации. <b>Главное, чтобы задача была грамотно поставлена, а постановку мы сделаем вместе.</b></p>
+      </div>
+      <div class="offers">
+        <article class="offer rv">
+          <h3>Заказать проект</h3>
+          <p>Дерево стратегических возможностей организации, концептуальная схема предметной области, внедрение языковых моделей в аналитический контур, формализация теории или регламента. Срок и объём согласуем после первой встречи.</p>
+          <ul class="steps">
+            <li><i>1</i><span>Вы описываете ситуацию в свободной форме: что болит и чего хотите.</span></li>
+            <li><i>2</i><span>Я возвращаю постановку задачи: понятия, границы, что считать результатом.</span></li>
+            <li><i>3</i><span>Работа идёт итерациями, каждая заканчивается проверяемым артефактом.</span></li>
+          </ul>
+          <a class="btn accent" href="mailto:shliapochnik.ny@mipt.ru?subject=%D0%97%D0%B0%D0%BA%D0%B0%D0%B7%20%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B0&amp;body=%D0%9A%D1%80%D0%B0%D1%82%D0%BA%D0%BE%20%D0%BE%20%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B5%3A%20">Написать о проекте</a>
+        </article>
+        <article class="offer rv">
+          <span class="free">первая консультация бесплатно</span>
+          <h3>Провести консультацию</h3>
+          <p>Час разговора о вашей задаче: что в ней известно, что неизвестно и что из неизвестного действительно мешает. Часто после такого разбора проект оказывается в разы меньше, чем казался, или не нужен вовсе.</p>
+          <ul class="steps">
+            <li><i>1</i><span>Письмо с темой «Консультация» и двумя-тремя строками о задаче.</span></li>
+            <li><i>2</i><span>Созвон или встреча в Долгопрудном или Москве.</span></li>
+            <li><i>3</i><span>После встречи вы получаете короткую записку: постановка, варианты, следующий шаг.</span></li>
+          </ul>
+          <a class="btn" href="mailto:shliapochnik.ny@mipt.ru?subject=%D0%9A%D0%BE%D0%BD%D1%81%D1%83%D0%BB%D1%8C%D1%82%D0%B0%D1%86%D0%B8%D1%8F&amp;body=%D0%9E%20%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B5%3A%20">Записаться на консультацию</a>
+        </article>
+      </div>
+      <p class="fine">Если кнопка не открыла почтовую программу, напишите на <a href="#contacts">shliapochnik.ny@mipt.ru</a> с темой «Проект» или «Консультация».</p>
+    </div>
+  </section>
+
+  <section class="block" id="contacts">
+    <div class="wrap">
+      <div class="contacts">
+        <div class="rv">
+          <h2>Контакты</h2>
+          <p class="big" style="margin-top:16px">Открыт к задачам, где нужна и строгость, и понимание того, как устроены организации.</p>
+        </div>
+        <div class="clist rv">
+          <div class="crow"><span class="k">МФТИ</span><span class="v"><a href="mailto:shliapochnik.ny@mipt.ru">shliapochnik.ny@mipt.ru</a></span><button class="copy" type="button" data-copy="shliapochnik.ny@mipt.ru">Скопировать</button></div>
+          <div class="crow"><span class="k">Физтех</span><span class="v"><a href="mailto:shliapochnik.nia@phystech.edu">shliapochnik.nia@phystech.edu</a></span><button class="copy" type="button" data-copy="shliapochnik.nia@phystech.edu">Скопировать</button></div>
+          <div class="crow"><span class="k">Концепт</span><span class="v"><a href="mailto:n.shlyapochnik@acconcept.ru">n.shlyapochnik@acconcept.ru</a></span><button class="copy" type="button" data-copy="n.shlyapochnik@acconcept.ru">Скопировать</button></div>
+          <div class="crow"><span class="k">телефон</span><span class="v"><a href="tel:+79151853126">+7 915 185-31-26</a></span><button class="copy" type="button" data-copy="+79151853126">Скопировать</button></div>
+          <div class="crow"><span class="k">город</span><span class="v">Долгопрудный, Московская область</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Никита Шляпочник</span>
+    <span>Кафедра КАиП ФПМИ МФТИ · НП ЦИВТ «Концепт»</span>
+  </div>
+</footer>
+
+<button class="totop" id="totop" type="button" aria-label="Наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg></button>
+
+<script>
+(function(){
+  document.documentElement.classList.add('js');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var root = document.documentElement;
+
+  /* ---------- theme toggle ---------- */
+  try { var saved = localStorage.getItem('theme'); if (saved === 'dark' || saved === 'light') root.setAttribute('data-theme', saved); } catch(e){}
+  var btn = document.getElementById('themeBtn');
+  function isDark(){
+    var t = root.getAttribute('data-theme');
+    if (t === 'dark') return true; if (t === 'light') return false;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  btn.addEventListener('click', function(){
+    var next = isDark() ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch(e){}
+  });
+
+  /* ---------- top bar, progress, to-top ---------- */
+  var top = document.getElementById('topbar'), prog = document.getElementById('progress'), totop = document.getElementById('totop');
+  function onScroll(){
+    var y = window.scrollY || 0;
+    top.classList.toggle('scrolled', y > 8);
+    var max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    prog.style.width = Math.min(100, y / max * 100) + '%';
+    totop.classList.toggle('show', y > 700);
+  }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  totop.addEventListener('click', function(){ window.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'}); });
+
+  /* ---------- rotating word in the thesis line ---------- */
+  var rot = document.getElementById('rot');
+  if (rot && !reduce){
+    var words = Array.prototype.slice.call(rot.children), idx = 0;
+    function fit(){ rot.style.width = words[idx].getBoundingClientRect().width + 'px'; }
+    function fitAll(){ words.forEach(function(s){ s.style.width = 'max-content'; }); fit(); }
+    fitAll();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
+    window.addEventListener('resize', fit);
+    setInterval(function(){
+      var cur = words[idx]; idx = (idx + 1) % words.length; var nxt = words[idx];
+      cur.classList.remove('on'); cur.classList.add('off');
+      nxt.classList.remove('off'); nxt.classList.add('on');
+      fit();
+      setTimeout(function(){ cur.classList.remove('off'); }, 600);
+    }, 2600);
+  }
+
+  /* ---------- active nav + reveal + counters ---------- */
+  var links = Array.prototype.slice.call(document.querySelectorAll('.nav a'));
+  var secs = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  function countUp(el){
+    var target = parseInt(el.getAttribute('data-count'), 10); if (!isFinite(target) || reduce) return;
+    var t0 = null, dur = 900;
+    function step(ts){ if (t0 === null) t0 = ts; var p = Math.min(1, (ts - t0) / dur); p = 1 - Math.pow(1 - p, 3); el.textContent = Math.round(target * p); if (p < 1) requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+  }
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting){
+        links.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id); });
+      }});
+    }, {rootMargin:'-40% 0px -55% 0px'});
+    secs.forEach(function(s){ if (s) io.observe(s); });
+    var cnt = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting){ cnt.unobserve(e.target); countUp(e.target); } });
+    }, {threshold:0.4});
+    document.querySelectorAll('[data-count]').forEach(function(el){ cnt.observe(el); });
+  }
+
+  /* ---------- copy buttons ---------- */
+  document.querySelectorAll('.copy').forEach(function(b){
+    b.addEventListener('click', function(){
+      var text = b.getAttribute('data-copy');
+      var done = function(){ b.textContent = 'Скопировано'; b.classList.add('done'); setTimeout(function(){ b.textContent = 'Скопировать'; b.classList.remove('done'); }, 1800); };
+      var fallback = function(){
+        var v = b.parentNode.querySelector('.v'); var r = document.createRange(); r.selectNodeContents(v);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        try { document.execCommand('copy'); done(); } catch(e){}
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done, fallback); } else fallback();
+    });
+  });
+
+  /* ---------- ДВОСВ tree: a dependency tree of strategic capabilities that builds itself ---------- */
+  var canvas = document.getElementById('tree');
+  if (!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext('2d');
+
+  var N = [
+    {id:'root', t:'goal', l:'Доктринальная цель', p:null},
+    {id:'a',  t:'cap', l:'Возможность A', p:'root'},
+    {id:'b',  t:'cap', l:'Возможность B', p:'root'},
+    {id:'c',  t:'cap', l:'Возможность C', p:'root'},
+    {id:'a1', t:'cap', l:'Базовая возможность', p:'a'},
+    {id:'a2', t:'fn',  l:'Метод', p:'a', opt:true},
+    {id:'a3', t:'hyp', l:'Гипотеза', p:'a'},
+    {id:'b1', t:'res', l:'Ресурс', p:'b'},
+    {id:'b2', t:'cap', l:'Возможность', p:'b'},
+    {id:'b3', t:'unk', l:'Неизвестное', p:'b', opt:true},
+    {id:'c1', t:'fn',  l:'Функция', p:'c', opt:true},
+    {id:'c2', t:'hyp', l:'Гипотеза', p:'c'},
+    {id:'c3', t:'cap', l:'Базовая возможность', p:'c'},
+    {id:'a11',t:'res', l:'Ресурс', p:'a1', opt:true},
+    {id:'a31',t:'fn',  l:'Верификация', p:'a3'},
+    {id:'b21',t:'unk', l:'Неизвестное', p:'b2'},
+    {id:'b31',t:'fn',  l:'Снятие неизвестности', p:'b3', opt:true},
+    {id:'c31',t:'unk', l:'Неизвестное', p:'c3'}
+  ];
+  var XALL = [ {f:'b1', to:'a2', k:'support'}, {f:'c2', to:'b2', k:'block'}, {f:'a31', to:'c31', k:'support'}, {f:'b1', to:'a1', k:'support'} ];
+
+  var ALL = N.slice(), byId = {}, X = [], maxDepth = 0;
+  function build(narrow){
+    N = ALL.filter(function(n){ return !(narrow && n.opt); });
+    byId = {}; N.forEach(function(n){ byId[n.id] = n; n.ch = []; });
+    N.forEach(function(n){ if (n.p) byId[n.p].ch.push(n); });
+    N.forEach(function(n){ var d = 0, q = n; while (q.p){ d++; q = byId[q.p]; } n.depth = d; });
+    maxDepth = Math.max.apply(null, N.map(function(n){ return n.depth; }));
+    X = XALL.filter(function(x){ return byId[x.f] && byId[x.to]; });
+  }
+  build(false);
+
+  var W = 0, H = 0, dpr = 1, layout = null, hover = null, start = null, done = false;
+
+  function cssVar(name){ return getComputedStyle(root).getPropertyValue(name).trim() || '#888'; }
+  function colors(){
+    return { goal:cssVar('--node-goal'), cap:cssVar('--node-cap'), res:cssVar('--node-res'), fn:cssVar('--node-fn'), hyp:cssVar('--node-hyp'), unk:cssVar('--node-unk'),
+             block:cssVar('--edge-block'), line:cssVar('--line'), ink:cssVar('--ink'), ink3:cssVar('--ink-3'), paper:cssVar('--paper') };
+  }
+
+  function measure(){
+    var r = canvas.getBoundingClientRect();
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = Math.max(1, Math.round(r.width)); H = Math.max(1, Math.round(r.height));
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    compute();
+  }
+
+  function compute(){
+    var narrow = W < 560;
+    build(narrow);
+    var family = getComputedStyle(document.body).fontFamily;
+    var gapX = narrow ? 6 : 10;
+    // labels may wrap to two lines; pick the largest font size at which the widest level fits the canvas
+    var fs = narrow ? 10.5 : 12.5, total = Infinity, padX, nh, lh;
+    for (var tries = 0; tries < 12; tries++){
+      ctx.font = '500 ' + fs + 'px ' + family;
+      padX = Math.round(fs * 0.75); lh = Math.round(fs * 1.2);
+      N.forEach(function(n){
+        var words = n.l.split(' '), lines = [];
+        if (words.length > 1 && ctx.measureText(n.l).width > fs * 9){ lines = [words.slice(0, Math.ceil(words.length/2)).join(' '), words.slice(Math.ceil(words.length/2)).join(' ')]; }
+        else lines = [n.l];
+        n.lines = lines; n.w = Math.ceil(Math.max.apply(null, lines.map(function(s){ return ctx.measureText(s).width; }))) + padX * 2;
+        n.h = lh * lines.length + Math.round(fs * 0.9);
+      });
+      nh = Math.max.apply(null, N.map(function(n){ return n.h; }));
+      N.forEach(function(n){ n.h = nh; });
+      function sub(n){ if (!n.ch.length){ n.sw = n.w; return n.sw; } var s = 0; n.ch.forEach(function(c){ s += sub(c); }); s += gapX * (n.ch.length - 1); n.sw = Math.max(s, n.w); return n.sw; }
+      total = sub(byId.root);
+      if (total <= W - 4 || fs <= 8) break;
+      fs -= 0.5;
+    }
+    var scale = Math.min(1, (W - 4) / total);
+    var levelGap = Math.min(nh + (narrow ? 34 : 56), (H - 8 - nh) / Math.max(1, maxDepth));
+    var treeH = nh + levelGap * maxDepth, top = Math.max(4, (H - treeH) / 2);
+    function place(n, x0){
+      var cx;
+      if (!n.ch.length){ cx = x0 + n.sw / 2; }
+      else {
+        var x = x0 + (n.sw - (n.ch.reduce(function(s,c){ return s + c.sw; }, 0) + gapX * (n.ch.length - 1))) / 2;
+        n.ch.forEach(function(c){ place(c, x); x += c.sw + gapX; });
+        cx = (n.ch[0].cx + n.ch[n.ch.length - 1].cx) / 2;
+      }
+      n.cx = cx; n.cy = top + n.depth * levelGap + nh / 2;
+    }
+    place(byId.root, (W - total * scale) / 2 / scale);
+    N.forEach(function(n){ n.x = (n.cx) * scale; n.y = n.cy; n.rw = n.w * scale; n.fs = fs * scale; n.lh = lh * scale; });
+    var E = [];
+    N.forEach(function(n){ if (!n.ch.length) return; var busY = n.y + n.h / 2 + (levelGap - n.h) * 0.5;
+      n.ch.forEach(function(c){ E.push({f:n, to:c, k:'decomp', pts:[[n.x, n.y + n.h/2],[n.x, busY],[c.x, busY],[c.x, c.y - c.h/2]], depth:c.depth}); }); });
+    X.forEach(function(x){ var f = byId[x.f], t = byId[x.to];
+      var midY = (f.y + t.y) / 2; var pts;
+      if (Math.abs(f.y - t.y) < 1){ var yy = f.y + f.h/2 + 14; pts = [[f.x, f.y + f.h/2],[f.x, yy],[t.x, yy],[t.x, t.y + t.h/2]]; }
+      else if (f.y > t.y){ pts = [[f.x, f.y - f.h/2],[f.x, midY],[t.x, midY],[t.x, t.y + t.h/2]]; }
+      else { pts = [[f.x, f.y + f.h/2],[f.x, midY],[t.x, midY],[t.x, t.y - t.h/2]]; }
+      E.push({f:f, to:t, k:x.k, pts:pts, depth:maxDepth + 1}); });
+    layout = {E:E, scale:scale};
+  }
+
+  function ease(t){ return t < 0 ? 0 : t > 1 ? 1 : 1 - Math.pow(1 - t, 3); }
+  function rr(x, y, w, h, r){ ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+  function partial(pts, frac){
+    var L = 0; for (var i = 1; i < pts.length; i++) L += Math.abs(pts[i][0]-pts[i-1][0]) + Math.abs(pts[i][1]-pts[i-1][1]);
+    var target = L * frac, acc = 0; ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+    for (var j = 1; j < pts.length; j++){ var seg = Math.abs(pts[j][0]-pts[j-1][0]) + Math.abs(pts[j][1]-pts[j-1][1]);
+      if (acc + seg <= target){ ctx.lineTo(pts[j][0], pts[j][1]); acc += seg; }
+      else { var k = seg ? (target - acc) / seg : 1; ctx.lineTo(pts[j-1][0] + (pts[j][0]-pts[j-1][0]) * k, pts[j-1][1] + (pts[j][1]-pts[j-1][1]) * k); break; } }
+    ctx.stroke();
+  }
+  function ancestors(n){ var s = {}; var q = n; while (q){ s[q.id] = true; q = q.p ? byId[q.p] : null; } return s; }
+
+  function draw(t){
+    if (!layout) return;
+    var C = colors(); var E = layout.E; var levels = maxDepth + 2;
+    ctx.clearRect(0, 0, W, H);
+    var hl = hover ? ancestors(hover) : null;
+    E.forEach(function(e){
+      var lt = ease(t * levels - e.depth + 0.15); if (lt <= 0) return;
+      var on = !hl || (hl[e.to.id] && hl[e.f.id]);
+      if (e.k === 'block'){ ctx.strokeStyle = C.block; ctx.setLineDash([]); ctx.lineWidth = 1.6; }
+      else if (e.k === 'support'){ ctx.strokeStyle = C.ink3; ctx.setLineDash([5,4]); ctx.lineWidth = 1.3; }
+      else { ctx.strokeStyle = C.ink3; ctx.setLineDash([]); ctx.lineWidth = 1.3; }
+      ctx.globalAlpha = (on ? 0.9 : 0.18); partial(e.pts, lt); ctx.setLineDash([]);
+      if (e.k === 'block' && lt >= 1){ var p = e.pts[e.pts.length-1]; ctx.beginPath(); ctx.moveTo(p[0]-5, p[1]+6); ctx.lineTo(p[0]+5, p[1]+6); ctx.lineWidth = 2; ctx.stroke(); }
+      else if (e.k === 'support' && lt >= 1){ var q = e.pts[e.pts.length-1]; ctx.fillStyle = C.ink3; ctx.beginPath(); ctx.arc(q[0], q[1], 2.4, 0, Math.PI*2); ctx.fill(); }
+    });
+    ctx.globalAlpha = 1;
+    N.forEach(function(n){
+      var nt = ease(t * levels - n.depth); if (nt <= 0) return;
+      var on = !hl || hl[n.id];
+      var s = 0.6 + 0.4 * nt; var w = n.rw * s, h = n.h * s;
+      ctx.globalAlpha = (on ? 1 : 0.28) * Math.min(1, nt * 1.4);
+      var col = C[n.t];
+      ctx.fillStyle = C.paper; rr(n.x - w/2, n.y - h/2, w, h, 7); ctx.fill();
+      if (n.t === 'goal'){ ctx.fillStyle = col; rr(n.x - w/2, n.y - h/2, w, h, 7); ctx.fill(); ctx.fillStyle = C.paper; }
+      else if (n.t === 'hyp'){ ctx.strokeStyle = col; ctx.setLineDash([4,3]); ctx.lineWidth = 1.4; rr(n.x - w/2, n.y - h/2, w, h, 7); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle = C.ink; }
+      else if (n.t === 'unk'){ ctx.strokeStyle = col; ctx.setLineDash([2,3]); ctx.lineWidth = 1.4; rr(n.x - w/2, n.y - h/2, w, h, 7); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle = C.ink; }
+      else { ctx.strokeStyle = col; ctx.lineWidth = 1.5; rr(n.x - w/2, n.y - h/2, w, h, 7); ctx.stroke();
+             ctx.save(); ctx.globalAlpha *= 0.14; ctx.fillStyle = col; rr(n.x - w/2, n.y - h/2, w, h, 7); ctx.fill(); ctx.restore(); ctx.fillStyle = C.ink; }
+      if (nt > 0.5){ ctx.font = '500 ' + n.fs + 'px ' + getComputedStyle(document.body).fontFamily; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.save(); ctx.beginPath(); ctx.rect(n.x - w/2, n.y - h/2, w, h); ctx.clip();
+        var L = n.lines.length, y0 = n.y - (L - 1) * n.lh / 2;
+        for (var li = 0; li < L; li++) ctx.fillText(n.lines[li], n.x, y0 + li * n.lh + 0.5);
+        ctx.restore(); }
+    });
+    ctx.globalAlpha = 1;
+  }
+
+  var DUR = 2800;
+  function frame(ts){
+    if (start === null) start = ts;
+    var t = Math.min(1, (ts - start) / DUR);
+    draw(t);
+    if (t < 1) requestAnimationFrame(frame); else done = true;
+  }
+  function run(){ measure(); if (reduce){ done = true; draw(1); } else { start = null; done = false; requestAnimationFrame(frame); } }
+
+  function hit(x, y){ for (var i = N.length - 1; i >= 0; i--){ var n = N[i]; if (n.x === undefined) continue; if (Math.abs(x - n.x) <= n.rw/2 && Math.abs(y - n.y) <= n.h/2) return n; } return null; }
+  canvas.addEventListener('pointermove', function(ev){ var r = canvas.getBoundingClientRect(); var h = hit(ev.clientX - r.left, ev.clientY - r.top); if (h !== hover){ hover = h; canvas.style.cursor = h ? 'pointer' : 'default'; if (done) draw(1); } });
+  canvas.addEventListener('pointerleave', function(){ if (hover){ hover = null; if (done) draw(1); } });
+
+  var started = false;
+  function startOnce(){ if (started) return; started = true; run(); }
+  if (document.fonts && document.fonts.ready){ document.fonts.ready.then(startOnce); setTimeout(startOnce, 900); } else startOnce();
+
+  var rt; window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(function(){ measure(); draw(1); }, 120); });
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(){ if (layout) draw(1); });
+  new MutationObserver(function(){ if (layout) draw(1); }).observe(root, {attributes:true, attributeFilter:['data-theme']});
+})();
+</script>
+</body>
+</html>
