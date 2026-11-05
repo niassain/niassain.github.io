@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://niassain.github.io/sitemap.xml
