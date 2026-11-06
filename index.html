@@ -112,7 +112,7 @@
 }
 
 *,*::before,*::after{box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{
   margin:0;background:var(--paper);color:var(--ink);
@@ -165,8 +165,8 @@ p{margin:0}
 .hero h1{font-size:clamp(44px,6.2vw,78px);line-height:1.02;margin-bottom:22px}
 .hero h1 .ln{display:block}
 .thesis{font-family:var(--font-display);font-size:clamp(22px,2.4vw,30px);line-height:1.3;color:var(--ink);margin-bottom:18px;text-wrap:balance}
-.thesis .rot{display:grid;color:var(--accent);height:1.3em;overflow:hidden;white-space:nowrap}
-.thesis .rot span{grid-area:1/1;opacity:0;transform:translateY(100%);transition:transform .55s cubic-bezier(.2,.7,.2,1),opacity .4s}
+.thesis .rot{display:block;position:relative;width:100%;height:1.35em;overflow:hidden;color:var(--accent);contain:strict}
+.thesis .rot span{position:absolute;left:0;top:0;white-space:nowrap;font-size:min(1em,7.4vw);line-height:1.35em;opacity:0;transform:translateY(100%);transition:transform .55s cubic-bezier(.2,.7,.2,1),opacity .4s}
 .thesis .rot span.on{opacity:1;transform:none}
 .thesis .rot span.off{opacity:0;transform:translateY(-100%)}
 .lead{font-size:clamp(16.5px,1.5vw,18.5px);color:var(--ink-2);max-width:54ch;line-height:1.62}
@@ -431,7 +431,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
         <div class="kicker"><span>онтолог</span><span>большие лингвистические модели</span><span>теория информации и информационная безопасность</span></div>
         <h1><span class="ln">Никита</span><span class="ln">Шляпочник</span></h1>
         <p class="thesis">Общение с любым интеллектом: <span class="rot" id="rot" aria-label="естественным, искусственным, сверхчеловеческим"><span class="on">естественным.</span><span>искусственным.</span><span>сверхчеловеческим.</span></span></p>
-        <p class="lead">Работаю там, где <b>строгая математика встречается с живыми организациями</b>: перевожу цели и замыслы руководителей на язык формальных моделей и возвращаю им ясную картину собственного будущего. Довожу задачу от интервью с первыми лицами до модели, кода и готового решения.</p>
+        <p class="lead">Работаю там, где <b>строгая математика встречается с живыми организациями</b>: формализую цели и замыслы руководителей в строгих моделях и возвращаю им ясную картину собственного будущего. Сопровождаю задачу на всём пути — от интервью с первыми лицами до модели, программной реализации и внедрённого решения.</p>
         <div class="cta">
           <a class="btn accent" href="#order">Заказать проект</a>
           <a class="btn primary" href="#order">Консультация, первая бесплатно</a>
