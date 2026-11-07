@@ -327,7 +327,10 @@ section.block{padding-block:clamp(56px,8vw,104px)}
 .order h2{color:var(--band-ink);font-size:clamp(30px,3.6vw,44px)}
 .order .intro{color:var(--band-muted);max-width:60ch;margin-top:14px;font-size:17px}
 .order .intro b{color:var(--band-ink);font-weight:500}
-.offers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:36px}
+.offers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:36px}
+@media (max-width:1000px){.offers{grid-template-columns:1fr}}
+.roles{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:5px;font-size:14.5px;color:var(--band-muted)}
+.roles li b{color:var(--band-ink);font-weight:500}
 .offer{border:1px solid var(--band-line);border-radius:var(--radius);padding:26px 28px;display:flex;flex-direction:column;gap:12px;transition:border-color .25s,transform .25s}
 .offer:hover{border-color:var(--band-muted);transform:translateY(-3px)}
 .offer h3{font-family:var(--font-display);font-weight:400;font-size:26px;color:var(--band-ink)}
@@ -754,6 +757,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
           <dt>Математика и физика</dt><dd>Функциональный анализ; уравнения математической физики; квантовая механика и квантовые вычисления; случайные процессы и СДУ; методы оптимального управления; статистическая физика.</dd>
           <dt>Разработка и данные</dt><dd>Python (pandas, NetworkX, FastAPI, matplotlib, mpmath); JavaScript; Go; Java; C, C++; SQL, PostgreSQL; Git; LaTeX.</dd>
           <dt>Машинное обучение</dt><dd>PyTorch: свёрточные и рекуррентные сети, автоэнкодеры; анализ временных рядов.</dd>
+          <dt>Системный анализ</dt><dd>Постановка задач и требования; концептуальные модели предметной области и глоссарии; схемы процессов (IDEF0, BPMN); технические задания и регламенты; структурирование данных для баз и RAG-контуров.</dd>
           <dt>Преподавание</dt><dd>Индивидуальные занятия по физике и математике со школьниками; объяснение формальных теорий неспециалистам, от популярных текстов до методичек.</dd>
         </dl>
       </div>
@@ -818,7 +822,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
   <section class="order" id="order">
     <div class="wrap">
       <div class="rv">
-        <h2>Заказать проект или консультацию</h2>
+        <h2>Заказать проект, консультацию или пригласить в команду</h2>
         <p class="intro">Беру задачи из стратегии, онтологии, формализации и применения языковых моделей: от разбора одной проблемы до полного дерева возможностей организации. <b>Главное, чтобы задача была грамотно поставлена, а постановку мы сделаем вместе.</b></p>
       </div>
       <div class="offers">
@@ -842,6 +846,19 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
             <li><i>3</i><span>После встречи вы получаете короткую записку: постановка, варианты, следующий шаг.</span></li>
           </ul>
           <a class="btn" href="mailto:shliapochnik.ny@mipt.ru?subject=%D0%9A%D0%BE%D0%BD%D1%81%D1%83%D0%BB%D1%8C%D1%82%D0%B0%D1%86%D0%B8%D1%8F&amp;body=%D0%9E%20%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B5%3A%20">Записаться на консультацию</a>
+        </article>
+        <article class="offer rv">
+          <span class="free">гибрид или удалённо · ГПХ, самозанятость, штат</span>
+          <h3>Пригласить в команду</h3>
+          <p>Роли, в которых я закрываю задачу целиком, от постановки до результата:</p>
+          <ul class="roles">
+            <li><b>Аналитик, системный аналитик</b> — требования, модели предметной области, постановки для разработки.</li>
+            <li><b>Онтолог, методолог</b> — системы понятий, регламенты, стандарты, глоссарии, онтологии для БЛМ и RAG.</li>
+            <li><b>LLM-инженер</b> — промпты, пайплайны, оценка качества, закрытые контуры на открытых моделях.</li>
+            <li><b>Консультант по стратегии</b> — деревья целей и возможностей, стратегические сессии, отчёты для первых лиц.</li>
+            <li><b>Научный сотрудник</b> — формальные методы, логика, комбинаторика, публикации.</li>
+          </ul>
+          <a class="btn" href="docs/Shliapochnik_Nikita_CV_RU_EN.pdf" target="_blank" rel="noopener">Резюме, RU / EN</a>
         </article>
       </div>
       <p class="fine">Если кнопка не открыла почтовую программу, напишите на <a href="#contacts">shliapochnik.ny@mipt.ru</a> с темой «Проект» или «Консультация».</p>
